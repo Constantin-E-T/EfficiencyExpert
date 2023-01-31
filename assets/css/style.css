@@ -70,6 +70,7 @@ textarea {
   transition: all 0.3s ease-in-out;
 }
 
+/* media query */
 @media screen and (max-width: 500px) {
   .jumbotron {
     padding: 0;

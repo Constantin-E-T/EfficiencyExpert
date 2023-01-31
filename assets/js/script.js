@@ -58,13 +58,29 @@ $(document).ready(function() {
     // added a event listener to the save button to save the event in local storage
     $(".saveBtn").on("click", function () {
         var event = $(this)
-          .siblings("textarea")
-          .val();
+        .siblings("textarea")
+        .val();
         var time = $(this)
-          .parent()
-          .attr("data-time");
+        .parent()
+        .attr("data-time");
         localStorage.setItem(time, event);
+        
+        /* This is a function that is displaying a message when the save button is clicked. */
+        $("#alert-container").html(`
+        <div class="alert alert-success alert-dismissible fade show save-alert" role="alert">
+            Notes saved successfully!
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        `);
+
+        setTimeout(() => {
+        $(".save-alert").alert("close");
+        }, 3000);
+
     });
+
 
     // take the data from local storage and display it in the planner
     $.each(localStorage, function (key, value) {
@@ -72,5 +88,4 @@ $(document).ready(function() {
           .find("textarea")
           .val(value);
     });
-
 });

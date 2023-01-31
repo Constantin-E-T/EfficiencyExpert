@@ -1,4 +1,4 @@
-
+/* This is a function that is displaying the current day in the header. */
 $(document).ready(function() {
     /* This is a variable that is storing the current day. */
     var currentDay = moment().format('dddd, MMMM Do YYYY');
@@ -7,7 +7,7 @@ $(document).ready(function() {
     $('#currentDay').text(currentDay);
 
     // This is a for loop that is creating the rows for the planner. With the working hours from 9 to 18
-    for (var i = 9; i < 18; i++) {
+    for (var i = 9; i <= 18; i++) {
         var hour = moment().hour(i).format("h A");
         // This is creating the rows for the planner.
         var row = $("<div>").addClass("row time-block").attr("data-time", i);
@@ -26,7 +26,7 @@ $(document).ready(function() {
         }
     }
 
-    /* This is a function that is updating the colors of the rows*/
+    // This is a function that is updating the colors of the rows every hour.
     function updateColors() {
         var currentHour = moment().hour();
         $(".time-block").each(function() {
@@ -42,8 +42,35 @@ $(document).ready(function() {
     }
     
     updateColors();
-    /* This is a function that is updating the colors of the rows automatically every hour*/
+    // This is the call function that is updating the colors of the rows every hour.
     setInterval(updateColors, 3600000);
 
-    
+    // added a event listener to the rows to save the event in local storage
+    $(".time-block").on("click", function (event) {
+        event.preventDefault();
+        var event = $(this)
+          .find("textarea")
+          .val();
+        var time = $(this).attr("data-time");
+        localStorage.setItem(time, event);
+    });
+
+    // added a event listener to the save button to save the event in local storage
+    $(".saveBtn").on("click", function () {
+        var event = $(this)
+          .siblings("textarea")
+          .val();
+        var time = $(this)
+          .parent()
+          .attr("data-time");
+        localStorage.setItem(time, event);
+    });
+
+    // take the data from local storage and display it in the planner
+    $.each(localStorage, function (key, value) {
+        $("div[data-time='" + key + "']")
+          .find("textarea")
+          .val(value);
+    });
+
 });

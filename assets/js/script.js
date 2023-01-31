@@ -1,7 +1,9 @@
 
 $(document).ready(function() {
+    /* This is a variable that is storing the current day. */
     var currentDay = moment().format('dddd, MMMM Do YYYY');
 
+    /* This is a function that is displaying the current day in the header. */
     $('#currentDay').text(currentDay);
 
     // This is a for loop that is creating the rows for the planner. With the working hours from 9 to 18
@@ -23,4 +25,25 @@ $(document).ready(function() {
             $("div[data-time='" + i + "']").find("textarea").val(storedEvent);
         }
     }
+
+    /* This is a function that is updating the colors of the rows*/
+    function updateColors() {
+        var currentHour = moment().hour();
+        $(".time-block").each(function() {
+            var blockHour = parseInt($(this).attr("data-time"));
+            if (blockHour < currentHour) {
+                $(this).removeClass("future present").addClass("past");
+            } else if (blockHour === currentHour) {
+                $(this).removeClass("past future").addClass("present");
+            } else {
+                $(this).removeClass("past present").addClass("future");
+            }
+        });
+    }
+    
+    updateColors();
+    /* This is a function that is updating the colors of the rows automatically every hour*/
+    setInterval(updateColors, 3600000);
+
+    
 });
